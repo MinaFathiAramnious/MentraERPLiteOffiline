@@ -1,59 +1,35 @@
 ﻿📦 MentraERPLite (Root Directory)
  ┃
- ┣ 📂 api (المجلد الرئيسي للعمليات البرمجية الخلفية)
- ┃ ┣ 📂 auth  
- ┃ ┃ ┣ 📄 cs_login.php (تسجيل دخول العملاء)
- ┃ ┃ ┣ 📄 login.php (تسجيل دخول المالك)
- ┃ ┃ ┣ 📄 manage_agents.php (تسجيل بيانات الموظفين)
- ┃ ┃ ┗ 📄 update_profile.php (تحديث بيانات الملف الشخصي)
- ┃ ┣ 📄 add_complaint.php (إضافة الشكاوى)
- ┃ ┣ 📄 api_pnl.php (API لتقارير الأرباح والخسائر)
- ┃ ┣ 📄 api_register.php (تسجيل المستخدمين الجدد)
- ┃ ┣ 📄 api_subscriptions.php (إدارة الاشتراكات)
- ┃ ┣ 📄 cloud_backup_api.php (النسخ الاحتياطي السحابي)
- ┃ ┣ 📄 get_stats.php (جلب الإحصائيات العامة)
- ┃ ┗ 📄 get_stats_compline.php (جلب إحصائيات الشكاوى)
- ┃
- ┣ 📂 assets (الملفات المساعدة)
+ ┣ 📂 assets (الملفات المساعدة للواجهة وقواعد البيانات)
  ┃ ┣ 📂 img (الصور والأيقونات)
  ┃ ┃ ┣ 🖼️ icon.png
  ┃ ┃ ┣ 🖼️ profile.png
  ┃ ┃ ┗ 🖼️ smalicon.png
  ┃ ┗ 📂 js (ملفات جافا سكريبت الأساسية)
- ┃   ┗ 📄 db-init.js (تهيئه قاعدة البيانات برمجياً)
+ ┃   ┗ 📄 db-init.js (أهم ملف: يهيئ قاعدة البيانات المحلية IndexedDB باستخدام Dexie.js)
  ┃
- ┣ 📂 db (إعدادات قاعدة البيانات)
- ┃ ┣ 📄 auth_check.php (فحص صلاحيات الجلسة)
- ┃ ┣ 📄 db_config.php (ملف الاتصال - Singleton Pattern)
- ┃ ┗ 📄 schema.sql (هيكل الجداول البرمجي)
+ ┣ 📂 pages (وحدات النظام الديناميكية - يتم حقنها داخل لوحة التحكم بدون إعادة تحميل)
+ ┃ ┣ 📄 main.js (لوحة الإحصائيات الرئيسية)
+ ┃ ┣ 📄 sales.js (نقطة البيع POS - محسنة 100% للموبايل مع لوحة سفلية وتأثيرات اهتزاز)
+ ┃ ┣ 📄 sales_report.js (سجل المبيعات والفواتير)
+ ┃ ┣ 📄 inventory.js (إدارة المخزن - متوافق مع الموبايل + استخراج Excel و PDF)
+ ┃ ┣ 📄 purchases.js (إدارة المشتريات والموردين)
+ ┃ ┣ 📄 purchases_report.js (أرشيف المشتريات)
+ ┃ ┣ 📄 accounts.js (شجرة الحسابات)
+ ┃ ┣ 📄 journal.js (القيود اليومية)
+ ┃ ┣ 📄 settings.js (إعدادات النظام، العملة، اسم المحل)
+ ┃ ┗ 📄 system_info.js (نظام النسخ الاحتياطي واسترجاع البيانات)
  ┃
- ┣ 📂 pages (صفحات لوحة تحكم المالك - JS Modules)
- ┃ ┣ 📄 accounts.js
- ┃ ┣ 📄 Inventory.js
- ┃ ┣ 📄 journal.js
- ┃ ┣ 📄 main.js (الصفحة الرئيسية)
- ┃ ┣ 📄 purchases.js
- ┃ ┣ 📄 purchases_report.js
- ┃ ┣ 📄 sales.js
- ┃ ┣ 📄 sales_report.js
- ┃ ┣ 📄 settings.js (إعدادات النظام)
- ┃ ┗ 📄 system_info.js
  ┃
- ┣ 📂 pages_cs (صفحات لوحة تحكم العملاء - JS Modules)
- ┃ ┣ 📄 complaints.js
- ┃ ┣ 📄 customers.js
- ┃ ┣ 📄 overview.js
- ┃ ┣ 📄 users.js
- ┃ ┗ 📄 pnl_report.js
- ┃
- ┣ 📄 .htaccess (إعدادات السيرفر والروابط)
- ┣ 📄 cs_dashboard.php (واجهة لوحة تحكم العميل)
- ┣ 📄 cs_login.php (صفحة تسجيل دخول العميل)
- ┣ 📄 dashboard.php (واجهة لوحة تحكم المالك الأساسية)
- ┣ 📄 index.php (نقطة الدخول الرئيسية)
- ┣ 📄 login.php (صفحة تسجيل دخول المالك)
- ┣ 📄 logout.php (تسجيل الخروج للمالك)
- ┣ 📄 logout_cs.php (تسجيل الخروج للعميل)
- ┣ 📄 map.txt (خريطة ملفات النظام - هذا الملف)
- ┣ 📄 MENTRA_BACKUP_...xlsx (نسخة احتياطية إكسل)
- ┗ 📄 subscriptions.php (عرض خطط الاشتراك)
+ ┣ 📄 index.html (الصفحة التسويقية Landing Page - تعرض مميزات النظام)
+ ┣ 📄 subscriptions.html (صفحة إعداد النظام لأول مرة - تعمل بـ Vanilla JS فائقة السرعة)
+ ┣ 📄 login.html (تسجيل الدخول المحلي بالاسم أو الرقم - بدون React)
+ ┣ 📄 dashboard.html (هيكل لوحة التحكم الأساسية SPA - نظام القوائم وتوجيه الصفحات)
+ ┗ 📄 map.txt (خريطة ملفات النظام - هذا الملف)
+
+=======================================================
+📌 ملاحظات معمارية (Architecture Notes):
+1. النظام يعمل بنظام (Offline-First)، بمعنى أنه لا يعتمد على الـ PHP في التشغيل الأساسي، بل يعمل بالكامل داخل المتصفح.
+2. الانتقال بين الصفحات يتم عبر (Dynamic Script Injection) داخل ملف dashboard.html.
+3. جميع الواجهات تم تصميمها بنمط (Mobile-First) لتطابق تجربة التطبيقات الأصلية (Native Apps).
+=======================================================

@@ -2,184 +2,236 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ابدأ رحلتك مع Mentra Lite (نسخة محلية)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="theme-color" content="#0f172a">
     
-    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <script src="assets/js/db-init.js"></script>
-
+    <title>إعداد النظام | Mentra Lite</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="assets/img/smalicon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="assets/img/smalicon.png">
     
+    <!-- تحميل المكتبات الأساسية فقط (بدون React) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    <script src="assets/js/db-init.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker تم تفعيله بنجاح:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('فشل تفعيل Service Worker:', error);
+                });
+        });
+    }
+</script>
+    <!-- كود التحقق الفوري (يوضع هنا ليعمل قبل تحميل أي شيء في الصفحة) -->
+    <script>
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.replace('dashboard.html');
+        }
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background: #f8fafc; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.4); }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background: #f8fafc; 
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
-<body>
-    <div id="root"></div>
-<script type="text/babel">
-    const { useState } = React;
+<body class="flex flex-col items-center justify-center min-h-[100dvh] p-3 md:p-4 text-right bg-slate-50">
 
-    function SubscriptionPage() {
-        const [formData, setFormData] = useState({
-            full_name: '', // هذا سنعتبره "اسم المشروع"
-            username: '',
-            password: '',
-            phone: ''
-        });
-        const [loading, setLoading] = useState(false);
-        const [status, setStatus] = useState({ type: '', msg: '' });
+    <div class="max-w-md w-full glass-card rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden">
+        
+        <!-- الهيدر -->
+        <div class="bg-slate-900 p-6 md:p-8 text-center text-white relative">
+            <div class="w-12 h-12 md:w-16 md:h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-500/30">
+                <i class="fas fa-rocket text-xl md:text-3xl animate-bounce"></i>
+            </div>
+            <h2 class="text-xl md:text-2xl font-black italic tracking-tight">إعداد مشروعك الجديد</h2>
+            <p class="text-emerald-400 text-[9px] md:text-[10px] mt-2 font-black uppercase tracking-widest">
+                <i class="fas fa-lock mr-1"></i> جميع البيانات ستبقى على جهازك فقط
+            </p>
+        </div>
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            setLoading(true);
-            setStatus({ type: '', msg: '' });
+        <!-- الفورم -->
+        <form id="setup-form" class="p-6 md:p-8 space-y-4 md:space-y-5">
+            
+            <!-- رسائل النظام -->
+            <div id="status-message" class="hidden p-4 rounded-2xl text-xs font-black flex items-center gap-2 border">
+                <i id="status-icon" class="fas"></i>
+                <span id="status-text"></span>
+            </div>
 
-            try {
-                // 1. التأكد من أن اسم المستخدم غير مكرر محلياً
-                const existingUser = await db.local_users.where("username").equals(formData.username).first();
-                
-                if (existingUser) {
-                    setStatus({ type: 'error', msg: 'اسم المستخدم مسجل مسبقاً على هذا الجهاز' });
-                    setLoading(false);
-                    return;
-                }
-
-                // 2. إضافة المستخدم لجدول local_users
-                const userId = await db.local_users.add({
-                    full_name: formData.full_name,
-                    username: formData.username,
-                    password: formData.password,
-                    phone: formData.phone,
-                    role: 'admin',
-                    created_at: new Date()
-                });
-
-                // 3. تخزين "اسم المشروع" في جدول الإعدادات settings
-                // لكي يظهر في الفواتير والتقارير لاحقاً
-                await db.table('settings').put({
-                    id: 1,
-                    project_name: 'MentraERPLite', // الاسم التقني
-                    shop_name: formData.full_name,  // الاسم الذي أدخله المستخدم
-                    phone: formData.phone,
-                    currency: 'EGP',
-                    tax_rate: 0
-                });
-
-                // 4. إنشاء جلسة دخول نشطة فورية
-                await db.active_session.put({
-                    id: 1,
-                    user_id: userId,
-                    login_time: new Date()
-                });
-
-                setStatus({ type: 'success', msg: 'تم إعداد نظامك المحلي بنجاح!' });
-                
-                // توجيه للداشبورد مباشرة لأننا سجلنا الدخول فعلياً
-                setTimeout(() => window.location.href = 'dashboard.html', 1500);
-
-            } catch (err) {
-                console.error(err);
-                setStatus({ type: 'error', msg: 'فشل حفظ البيانات في المتصفح' });
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        return (
-            <div className="min-h-screen flex items-center justify-center p-4 text-right">
-                <div className="max-w-md w-full glass-card rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
-                    {/* Header */}
-                    <div className="bg-slate-900 p-8 text-center text-white relative">
-                        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                            <i className="fas fa-rocket text-2xl animate-pulse"></i>
-                        </div>
-                        <h2 className="text-2xl font-black italic">إعداد مشروعك الجديد 🚀</h2>
-                        <p className="text-slate-400 text-[10px] mt-2 font-bold uppercase tracking-widest">جميع البيانات ستبقى على جهازك فقط</p>
+            <div class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 pr-2">اسم المشروع / المحل</label>
+                    <div class="relative">
+                        <i class="fas fa-briefcase absolute right-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                        <input id="full_name" type="text" required class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-3.5 pr-11 pl-4 transition-all font-bold text-slate-700 text-[16px] outline-none text-right" placeholder="مثلاً: منارة للبرمجيات">
                     </div>
+                </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-8 space-y-5">
-                        {status.msg && (
-                            <div className={`p-4 rounded-2xl text-xs font-black flex items-center gap-2 ${status.type === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                                <i className={`fas ${status.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}`}></i>
-                                {status.msg}
-                            </div>
-                        )}
+                <div>
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 pr-2">اسم المدير (يستخدم للدخول)</label>
+                    <div class="relative">
+                        <i class="fas fa-user-shield absolute right-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                        <input id="username" type="text" required class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-3.5 pr-11 pl-4 transition-all font-bold text-slate-700 text-[16px] outline-none text-right" placeholder="admin">
+                    </div>
+                </div>
 
-                        <div className="space-y-4">
-                            <InputField 
-                                icon="fa-briefcase" label="اسم المشروع / المحل" 
-                                placeholder="مثلاً: منارة للبرمجيات" 
-                                value={formData.full_name}
-                                onChange={(val) => setFormData({...formData, full_name: val})}
-                            />
-                            <InputField 
-                                icon="fa-user-shield" label="اسم المدير (أدمن)" 
-                                placeholder="admin" 
-                                value={formData.username}
-                                onChange={(val) => setFormData({...formData, username: val})}
-                            />
-                            <InputField 
-                                icon="fa-phone" label="رقم التواصل" 
-                                placeholder="01xxxxxxxxx" 
-                                value={formData.phone}
-                                onChange={(val) => setFormData({...formData, phone: val})}
-                            />
-                            <InputField 
-                                icon="fa-lock" label="كلمة السر" 
-                                type="password" placeholder="••••••••" 
-                                value={formData.password}
-                                onChange={(val) => setFormData({...formData, password: val})}
-                            />
-                        </div>
+                <div>
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 pr-2">رقم التواصل</label>
+                    <div class="relative">
+                        <i class="fas fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                        <input id="phone" type="tel" required class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-3.5 pr-11 pl-4 transition-all font-bold text-slate-700 text-[16px] outline-none text-right" placeholder="01xxxxxxxxx">
+                    </div>
+                </div>
 
-                        <button 
-                            disabled={loading}
-                            className={`w-full py-5 rounded-[2rem] font-black text-lg shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 ${loading ? 'bg-slate-300' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'}`}
-                        >
-                            {loading ? 'جاري تهيئة النظام...' : 'بدء الاستخدام مجاناً'}
-                        </button>
-
-                        <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                             <p className="text-center text-[9px] text-blue-600 font-bold leading-relaxed">
-                                <i className="fas fa-shield-alt ml-1"></i>
-                                ملاحظة: بما أن النظام "أوفلاين"، لا يمكن استرجاع كلمة السر إذا ضاعت، احفظها جيداً.
-                            </p>
-                        </div>
-                    </form>
+                <div>
+                    <label class="block text-[11px] font-black text-slate-500 mb-1.5 pr-2">كلمة السر</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                        <input id="password" type="password" required class="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-3.5 pr-11 pl-4 transition-all font-bold text-slate-700 text-[16px] outline-none text-left" dir="ltr" placeholder="••••••••">
+                    </div>
                 </div>
             </div>
-        );
-    }
 
-    // مكون حقل الإدخال كما هو مع تعديل اتجاه النص
-    const InputField = ({ icon, label, placeholder, type = "text", value, onChange }) => (
-        <div>
-            <label className="block text-[10px] font-black text-slate-400 mb-2 mr-3 uppercase">{label}</label>
-            <div className="relative">
-                <i className={`fas ${icon} absolute right-5 top-1/2 -translate-y-1/2 text-slate-300`}></i>
-                <input 
-                    required
-                    type={type}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-4 pr-12 pl-4 transition-all font-bold text-slate-700 outline-none text-right"
-                    placeholder={placeholder}
-                />
+            <button id="submit-btn" type="submit" class="w-full mt-2 py-4 md:py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-base md:text-lg shadow-xl shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-3">
+                <span id="btn-text">بدء الاستخدام مجاناً</span>
+                <i id="btn-icon" class="fas fa-check"></i>
+            </button>
+
+            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 mt-2">
+                <p class="text-center text-[10px] text-blue-600 font-bold leading-relaxed">
+                    النظام "أوفلاين"، لا يمكن استرجاع كلمة السر حال نسيانها، احفظها جيداً.
+                </p>
             </div>
-        </div>
-    );
+        </form>
+    </div>
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<SubscriptionPage />);
-</script>
+    <!-- المنطق البرمجي (JavaScript) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('setup-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+            
+            const statusMsg = document.getElementById('status-message');
+            const statusText = document.getElementById('status-text');
+            const statusIcon = document.getElementById('status-icon');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // حالة التحميل
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-70');
+                btnText.innerText = 'جاري تهيئة النظام...';
+                btnIcon.className = 'fas fa-spinner fa-spin';
+                statusMsg.classList.add('hidden');
+
+                const fullName = document.getElementById('full_name').value.trim();
+                const username = document.getElementById('username').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const password = document.getElementById('password').value;
+
+                try {
+                    // 1. فحص إذا كان اسم المستخدم موجود مسبقاً
+                    const existingUser = await db.local_users.where("username").equalsIgnoreCase(username).first();
+                    
+                    if (existingUser) {
+                        showStatus('error', 'اسم المستخدم مسجل مسبقاً على هذا الجهاز');
+                        resetButton();
+                        return;
+                    }
+
+                    // 2. تسجيل المستخدم في Dexie
+                    const userId = await db.local_users.add({
+                        full_name: fullName,
+                        username: username,
+                        password: password,
+                        phone: phone,
+                        role: 'admin',
+                        created_at: new Date().toISOString()
+                    });
+
+                    // 3. حفظ إعدادات النظام الأولية
+                    await db.table('settings').put({
+                        id: 1,
+                        project_name: 'MentraERPLite',
+                        shop_name: fullName,
+                        phone: phone,
+                        currency: 'EGP',
+                        tax_rate: 0
+                    });
+
+                    // 4. تفعيل جلسة الدخول في Dexie
+                    await db.active_session.clear();
+                    await db.active_session.add({
+                        id: 1,
+                        user_id: userId,
+                        login_time: new Date().toISOString()
+                    });
+
+                    // 5. حفظ الجلسة في LocalStorage (ضروري جداً لكي لا يخرجه dashboard.html)
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userName', fullName);
+                    localStorage.setItem('userRole', 'admin');
+
+                    // 6. نجاح وتوجيه
+                    showStatus('success', 'تم إعداد نظامك بنجاح! جاري الدخول...');
+                    btnText.innerText = 'تم الانتهاء';
+                    btnIcon.className = 'fas fa-check-circle';
+                    submitBtn.classList.replace('bg-blue-600', 'bg-emerald-500');
+                    
+                    setTimeout(() => {
+                        window.location.replace('dashboard.html');
+                    }, 1000);
+
+                } catch (err) {
+                    console.error(err);
+                    showStatus('error', 'فشل حفظ البيانات في المتصفح');
+                    resetButton();
+                }
+            });
+
+            function showStatus(type, msg) {
+                statusMsg.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-600', 'border-emerald-100', 'bg-rose-50', 'text-rose-600', 'border-rose-100');
+                if (type === 'success') {
+                    statusMsg.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-100');
+                    statusIcon.className = 'fas fa-check-circle text-lg';
+                } else {
+                    statusMsg.classList.add('bg-rose-50', 'text-rose-600', 'border-rose-100');
+                    statusIcon.className = 'fas fa-exclamation-triangle text-lg';
+                }
+                statusText.innerText = msg;
+            }
+
+            function resetButton() {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70');
+                btnText.innerText = 'بدء الاستخدام مجاناً';
+                btnIcon.className = 'fas fa-check';
+            }
+        });
+    </script>
 </body>
 </html>

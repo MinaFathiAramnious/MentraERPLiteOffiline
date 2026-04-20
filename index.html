@@ -2,216 +2,308 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- تخصيص لون شريط الإشعارات في متصفح الأندرويد -->
+    <meta name="theme-color" content="#ffffff">
+    
     <title>Mentra Lite | الحل الذكي لإدارة النشاط التجاري</title>
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="assets/img/smalicon.png">
+    <link rel="apple-touch-icon" href="assets/img/smalicon.png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
-        .text-gradient { background: linear-gradient(to right, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .hero-pattern { background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
         
-        ::-webkit-scrollbar { width: 6px; }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
+        .text-gradient { 
+            background: linear-gradient(to left, #3b82f6, #10b981); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .hero-pattern { background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 60%); }
+        
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.2); }
+        
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #f8fafc; }
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+
+        #mobileMenu { transition: all 0.3s ease-in-out; transform-origin: top; }
+        .menu-open { transform: scaleY(1); opacity: 1; visibility: visible; }
+        .menu-closed { transform: scaleY(0); opacity: 0; visibility: hidden; }
     </style>
 </head>
-<body class="bg-white text-slate-800">
+<body class="bg-white text-slate-800 selection:bg-blue-200 selection:text-blue-900">
 
-    <nav class="fixed w-full z-50 glass p-4 md:px-12 flex justify-between items-center transition-all" id="mainNav">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200/50">
-                <img src="assets/img/smalicon.png" alt="Logo" class="w-7 h-7 object-contain">
+    <!-- ================= Navbar ================= -->
+    <nav class="fixed w-full z-50 glass p-4 md:px-12 transition-all duration-300" id="mainNav">
+        <div class="flex justify-between items-center max-w-7xl mx-auto w-full">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
+                    <img src="assets/img/smalicon.png" alt="Logo" class="w-6 h-6 object-contain">
+                </div>
+                <span class="text-xl md:text-2xl font-black tracking-tighter text-slate-900">Mentra<span class="text-blue-600">Lite</span></span>
             </div>
-            <span class="text-2xl font-black tracking-tighter text-slate-900">Mentra<span class="text-blue-600">Lite</span></span>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex gap-10 font-bold text-slate-600 text-sm items-center">
+                <a href="#features" class="hover:text-blue-600 transition-colors">المميزات</a>
+                <a href="#how-it-works" class="hover:text-blue-600 transition-colors">كيف يعمل؟</a>
+                <a href="#statistics" class="hover:text-blue-600 transition-colors">إحصائيات</a>
+                <a href="#enterprise" class="text-blue-600 font-black flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 hover:bg-blue-100 transition-colors">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    نسخة الشركات
+                </a>
+            </div>
+
+            <!-- Action Buttons & Mobile Toggle -->
+            <div class="flex items-center gap-3">
+                <a href="subscriptions.html" class="hidden sm:flex bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-sm hover:bg-blue-600 hover:shadow-blue-200 transition-all shadow-xl shadow-slate-200 active:scale-95">دخول النظام</a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="lg:hidden w-10 h-10 bg-slate-100 rounded-xl text-slate-700 flex items-center justify-center active:scale-95 transition-transform">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+            </div>
         </div>
-        <div class="hidden lg:flex gap-10 font-bold text-slate-600 text-sm">
-            <a href="#features" class="hover:text-blue-600 transition-colors">المميزات</a>
-            <a href="#how-it-works" class="hover:text-blue-600 transition-colors">كيف يعمل؟</a>
-            <a href="#statistics" class="hover:text-blue-600 transition-colors">إحصائيات</a>
-            <a href="#enterprise" class="text-blue-600 font-black flex items-center gap-2">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                نسخة الشركات
-            </a>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-2xl menu-closed lg:hidden">
+            <div class="flex flex-col p-6 gap-5 font-bold text-slate-700">
+                <a href="#features" class="mobile-link flex items-center gap-3 p-2 rounded-lg active:bg-slate-50"><i class="fas fa-star w-5 text-blue-500"></i> المميزات</a>
+                <a href="#how-it-works" class="mobile-link flex items-center gap-3 p-2 rounded-lg active:bg-slate-50"><i class="fas fa-cogs w-5 text-blue-500"></i> كيف يعمل؟</a>
+                <a href="#statistics" class="mobile-link flex items-center gap-3 p-2 rounded-lg active:bg-slate-50"><i class="fas fa-chart-line w-5 text-blue-500"></i> إحصائيات</a>
+                <a href="#enterprise" class="mobile-link text-blue-700 flex items-center gap-3 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <i class="fas fa-building w-5"></i> للمؤسسات والفروع
+                </a>
+                <a href="subscriptions.html" class="bg-blue-600 text-white p-4 rounded-xl text-center font-black mt-2 active:bg-blue-700 shadow-lg shadow-blue-200">ابدأ استخدام النظام مجاناً</a>
+            </div>
         </div>
-        <a href="subscriptions.html" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-sm hover:bg-blue-600 transition-all shadow-xl shadow-slate-200 active:scale-95">دخول النظام</a>
     </nav>
 
-    <section class="relative pt-48 pb-32 px-6 hero-pattern">
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-            <div data-aos="fade-up">
-                <span class="bg-blue-50 text-blue-600 px-5 py-2 rounded-full text-[11px] font-black mb-8 inline-block uppercase tracking-[0.2em] border border-blue-100">
-                    الجيل الثالث من أنظمة الإدارة المحلية 3.0
+    <!-- ================= Hero Section ================= -->
+    <section class="relative pt-32 md:pt-48 pb-20 md:pb-32 px-6 hero-pattern">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
+            
+            <div data-aos="fade-up" class="text-center lg:text-right mt-10 lg:mt-0 order-2 lg:order-1">
+                <span class="bg-blue-50 text-blue-600 px-5 py-2.5 rounded-full text-[10px] md:text-xs font-black mb-6 inline-block uppercase tracking-[0.1em] border border-blue-100 shadow-sm">
+                    🚀 الجيل الثالث من أنظمة الإدارة المحلية
                 </span>
-                <h1 class="text-5xl md:text-8xl font-black text-slate-900 leading-[1.1] mb-8 tracking-tighter">
+                
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 leading-[1.2] mb-6 tracking-tighter">
                     إدارة أذكى.. <br> <span class="text-gradient">بتكلفة صفر</span>
                 </h1>
-                <p class="text-slate-500 text-xl mb-12 leading-relaxed max-w-xl font-medium">
-                    حوّل متصفحك إلى نظام محاسبي وإداري متكامل. بدون سيرفرات، بدون بطء، وبخصوصية مطلقة لبياناتك.
+                
+                <p class="text-slate-500 text-base md:text-xl mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                    حوّل متصفحك إلى نظام محاسبي وإداري متكامل. بدون سيرفرات، بدون بطء، وبخصوصية مطلقة لبياناتك بالكامل على جهازك.
                 </p>
-                <div class="flex flex-wrap gap-5">
-                    <a href="subscriptions.html" class="bg-blue-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-3 group">
+                
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center lg:justify-start gap-4 md:gap-6">
+                    <a href="subscriptions.html" class="bg-blue-600 text-white px-8 py-4 md:py-5 rounded-[2rem] font-black text-base md:text-lg shadow-2xl shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 transition-all flex items-center justify-center gap-3 select-none group">
                         ابدأ تجربتك المجانية
-                        <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                        <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform duration-300"></i>
                     </a>
-                    <div class="flex items-center gap-4 px-6">
+                    
+                    <div class="flex items-center justify-center gap-4 px-4 py-2">
                         <div class="flex -space-x-3 space-x-reverse">
-                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-200"></div>
-                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-300"></div>
-                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-400"></div>
+                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-200 overflow-hidden shadow-sm"><img src="https://i.pravatar.cc/100?img=1" alt="user"></div>
+                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-300 overflow-hidden shadow-sm"><img src="https://i.pravatar.cc/100?img=2" alt="user"></div>
+                            <div class="w-10 h-10 rounded-full border-4 border-white bg-slate-400 overflow-hidden shadow-sm"><img src="https://i.pravatar.cc/100?img=3" alt="user"></div>
                         </div>
-                        <span class="text-xs font-black text-slate-400 italic">+1200 مستخدم نشط</span>
+                        <div class="flex flex-col items-start">
+                            <span class="text-xs md:text-sm font-black text-slate-800">+1200 مستخدم نشط</span>
+                            <span class="text-[9px] font-bold text-slate-400">يثقون في Mentra</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="relative" data-aos="zoom-in" data-aos-delay="200">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-400/10 blur-[80px] rounded-full animate-pulse"></div>
-                <div class="bg-white p-4 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-100 relative z-10 overflow-hidden group">
-                    <img src="https://img.freepik.com/free-vector/dashboard-ui-ux-design-template_52683-75988.jpg" class="rounded-[2.5rem] w-full grayscale group-hover:grayscale-0 transition-all duration-700" alt="Mentra Dashboard">
+
+            <div class="relative px-4 sm:px-0 order-1 lg:order-2" data-aos="zoom-in" data-aos-delay="100">
+                <div class="absolute -top-10 -right-10 w-32 h-32 md:w-48 md:h-48 bg-emerald-400/20 blur-[60px] md:blur-[80px] rounded-full animate-pulse"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 md:w-48 md:h-48 bg-blue-400/20 blur-[60px] md:blur-[80px] rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                
+                <div class="bg-white p-2 md:p-3 rounded-[2rem] md:rounded-[3rem] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] border border-slate-100 relative z-10 overflow-hidden group">
+                    <img src="https://img.freepik.com/free-vector/dashboard-ui-ux-design-template_52683-75988.jpg" class="rounded-[1.5rem] md:rounded-[2.5rem] w-full transition-transform duration-700 group-hover:scale-[1.02]" alt="Mentra Dashboard Interface">
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="statistics" class="py-20 border-y border-slate-50">
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+    <!-- ================= Statistics Section ================= -->
+    <section id="statistics" class="py-12 md:py-20 border-y border-slate-50 bg-slate-50/30">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             <div data-aos="fade-up">
-                <div class="text-4xl font-black text-slate-900 mb-2">100%</div>
-                <div class="text-xs font-black text-slate-400 uppercase tracking-widest text-right mr-3">خصوصية البيانات</div>
+                <div class="text-3xl md:text-5xl font-black text-slate-900 mb-2">100%</div>
+                <div class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">خصوصية البيانات</div>
             </div>
             <div data-aos="fade-up" data-aos-delay="100">
-                <div class="text-4xl font-black text-slate-900 mb-2">0ms</div>
-                <div class="text-xs font-black text-slate-400 uppercase tracking-widest text-right mr-3">وقت الاستجابة</div>
+                <div class="text-3xl md:text-5xl font-black text-slate-900 mb-2">0ms</div>
+                <div class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">وقت الاستجابة</div>
             </div>
             <div data-aos="fade-up" data-aos-delay="200">
-                <div class="text-4xl font-black text-slate-900 mb-2">Offline</div>
-                <div class="text-xs font-black text-slate-400 uppercase tracking-widest text-right mr-3">دعم انقطاع النت</div>
+                <div class="text-3xl md:text-5xl font-black text-slate-900 mb-2">Offline</div>
+                <div class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">دعم انقطاع النت</div>
             </div>
             <div data-aos="fade-up" data-aos-delay="300">
-                <div class="text-4xl font-black text-slate-900 mb-2">Unlimited</div>
-                <div class="text-xs font-black text-slate-400 uppercase tracking-widest text-right mr-3">عدد السجلات</div>
+                <div class="text-3xl md:text-5xl font-black text-blue-600 mb-2">∞</div>
+                <div class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">عدد السجلات مجاناً</div>
             </div>
         </div>
     </section>
 
-    <section id="features" class="py-32 bg-slate-50/50">
+    <!-- ================= Features Section ================= -->
+    <section id="features" class="py-20 md:py-32 bg-slate-50/50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-20" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">قوة النظام بين يديك</h2>
-                <p class="text-slate-400 font-bold max-w-2xl mx-auto text-lg">صممناه ليكون خفيفاً كالمتصفح، قوياً كأنظمة الـ ERP العملاقة.</p>
+            <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3 block">لماذا تختارنا؟</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">قوة النظام بين يديك</h2>
+                <p class="text-slate-500 font-medium max-w-2xl mx-auto text-base md:text-lg">صممناه ليكون خفيفاً كالمتصفح، قوياً كأنظمة الـ ERP العملاقة لتلبية كافة احتياجات محلك.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up">
-                    <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
                         <i class="fas fa-print"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">تقارير وفواتير PDF</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">استخرج تقارير يومية، شهرية، وفواتير احترافية بضغطة زر واحدة بصيغة PDF جاهزة للطباعة أو الإرسال.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">تقارير وفواتير PDF</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">استخرج تقارير يومية، شهرية، وفواتير احترافية بضغطة زر واحدة بصيغة PDF جاهزة للطباعة أو الإرسال.</p>
                 </div>
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
+
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
                         <i class="fas fa-search-dollar"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">محرك حسابات ذكي</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">حساب تلقائي للأرباح، المصاريف، المديونيات، والاشتراكات المتبقية دون تدخل يدوي منك.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">محرك حسابات ذكي</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">حساب تلقائي للأرباح، المصاريف، المديونيات، والاشتراكات المتبقية دون تدخل يدوي منك لتجنب الأخطاء.</p>
                 </div>
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
-                        <i class="fas fa-sync-alt"></i>
+
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
+                        <i class="fas fa-cloud-upload-alt"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">مزامنة يدوية وتلقائية</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">حافظ على أمان بياناتك عبر رفع نسخة احتياطية مشفرة إلى سحابة Mentra وقتما تشاء لاسترجاعها في أي وقت.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">نسخ احتياطي مرن</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">حافظ على أمان بياناتك عبر استخراج نسخة إكسيل (Excel) احتفاظاً بها، أو رفعها لسحابة Mentra.</p>
                 </div>
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up">
-                    <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
+
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
                         <i class="fas fa-bell"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">نظام التنبيهات</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">تنبيهات فورية بالاشتراكات التي أوشكت على الانتهاء أو الدفعات المتأخرة لتظل دائماً في الصورة.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">نظام التنبيهات</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">تنبيهات فورية بالمنتجات التي أوشكت على النفاذ أو الدفعات المتأخرة لتظل دائماً متحكماً بنشاطك.</p>
                 </div>
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
+
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
                         <i class="fas fa-database"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">تقنية Dexie DB</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">نستخدم أحدث تقنيات قواعد البيانات داخل المتصفح لضمان أداء خارق حتى مع آلاف السجلات.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">تقنية Dexie الخارقة</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">نستخدم أحدث تقنيات قواعد البيانات داخل المتصفح لضمان أداء خارق حتى مع تسجيل آلاف الفواتير.</p>
                 </div>
-                <div class="bg-white p-10 rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-8">
+
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] card-hover border border-slate-100" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-6 shadow-inner">
                         <i class="fas fa-mobile-alt"></i>
                     </div>
-                    <h3 class="text-2xl font-black mb-4">تصميم PWA</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">يمكنك تثبيت النظام على هاتفك كأنه تطبيق (App) دون الحاجة لتحميله من المتجر.</p>
+                    <h3 class="text-xl md:text-2xl font-black mb-3">تصميم كالتطبيق (PWA)</h3>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed font-medium">يمكنك تثبيت النظام على هاتفك أو الكمبيوتر كأنه تطبيق (App) مستقل دون الحاجة لتحميله من المتجر.</p>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <section id="how-it-works" class="py-32 bg-white">
+    <!-- ================= How it Works Section ================= -->
+    <section id="how-it-works" class="py-20 md:py-32 bg-white overflow-hidden">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="order-2 lg:order-1" data-aos="fade-right">
-                    <img src="https://img.freepik.com/free-vector/process-optimization-concept-illustration_114360-5208.jpg" alt="Work Process" class="w-full">
-                </div>
-                <div class="order-1 lg:order-2" data-aos="fade-left">
-                    <h2 class="text-4xl font-black mb-10 leading-tight">ابدأ في أقل من <span class="text-blue-600">دقيقة</span></h2>
-                    <div class="space-y-12">
-                        <div class="flex gap-6">
-                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-black flex-shrink-0 shadow-lg">1</div>
-                            <div>
-                                <h4 class="text-xl font-black mb-2">الدخول الفوري</h4>
-                                <p class="text-slate-500 font-medium">لا تحتاج لإنشاء حساب أو بريد إلكتروني، ادخل وابدأ العمل فوراً.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-black flex-shrink-0 shadow-lg">2</div>
-                            <div>
-                                <h4 class="text-xl font-black mb-2">إعداد نشاطك</h4>
-                                <p class="text-slate-500 font-medium">أضف اسم محلك، شعارك، والعملة التي تستخدمها من صفحة الإعدادات.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-black flex-shrink-0 shadow-lg">3</div>
-                            <div>
-                                <h4 class="text-xl font-black mb-2">إضافة العملاء</h4>
-                                <p class="text-slate-500 font-medium">ابدأ بتسجيل العملاء واشتراكاتهم، وشاهد التقارير تتحول لرسوم بيانية حية.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="enterprise" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-[4rem] p-12 md:p-24 relative overflow-hidden shadow-2xl">
-                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full -mr-64 -mt-64 blur-[120px]"></div>
+            <div class="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
                 
-                <div class="relative z-10 text-center max-w-3xl mx-auto">
-                    <span class="text-blue-400 font-black tracking-[0.3em] uppercase text-xs mb-6 inline-block">للمؤسسات والشركات الكبيرة</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white mb-8 leading-tight italic">انطلق نحو السحاب مع <br> <span class="text-blue-500">Mentra Business</span></h2>
-                    <p class="text-slate-400 text-lg mb-12 leading-relaxed font-medium">
-                        هل تمتلك أكثر من فرع؟ هل تريد مراقبة موظفيك من منزلك؟ انتقل الآن للنسخة السحابية الاحترافية التي تدعم تعدد الأجهزة، الفروع، والمزامنة اللحظية.
+                <div class="order-2 lg:order-1 relative" data-aos="fade-right">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-50 to-transparent rounded-[3rem] transform -rotate-3 scale-105 -z-10"></div>
+                    <img src="https://img.freepik.com/free-vector/process-optimization-concept-illustration_114360-5208.jpg" alt="Work Process" class="w-full drop-shadow-xl mix-blend-multiply">
+                </div>
+                
+                <div class="order-1 lg:order-2" data-aos="fade-left">
+                    <span class="text-emerald-500 font-bold text-sm tracking-widest uppercase mb-3 block">خطوات بسيطة</span>
+                    <h2 class="text-3xl md:text-4xl font-black mb-10 leading-tight text-slate-900">ابدأ العمل في أقل من <span class="text-blue-600">دقيقة واحدة</span></h2>
+                    
+                    <div class="space-y-8 md:space-y-10">
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-50 group-hover:bg-blue-600 text-slate-400 group-hover:text-white rounded-2xl flex items-center justify-center font-black flex-shrink-0 transition-colors border border-slate-200 shadow-sm">1</div>
+                            <div>
+                                <h4 class="text-lg md:text-xl font-black mb-2 text-slate-800">الدخول الفوري</h4>
+                                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">لا تحتاج لإنشاء حساب معقد أو إدخال بريد إلكتروني، اختر اسم مستخدم وكلمة سر وابدأ فوراً.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-50 group-hover:bg-blue-600 text-slate-400 group-hover:text-white rounded-2xl flex items-center justify-center font-black flex-shrink-0 transition-colors border border-slate-200 shadow-sm">2</div>
+                            <div>
+                                <h4 class="text-lg md:text-xl font-black mb-2 text-slate-800">إعداد نشاطك</h4>
+                                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">أضف اسم محلك، والعملة التي تستخدمها من صفحة الإعدادات لكي تظهر بشكل احترافي في فواتيرك.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 md:gap-6 group">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-50 group-hover:bg-blue-600 text-slate-400 group-hover:text-white rounded-2xl flex items-center justify-center font-black flex-shrink-0 transition-colors border border-slate-200 shadow-sm">3</div>
+                            <div>
+                                <h4 class="text-lg md:text-xl font-black mb-2 text-slate-800">ابدأ البيع وإدارة المخزن</h4>
+                                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">سجل منتجاتك، ابدأ في إصدار الفواتير، وشاهد كيف تتحول أرقامك إلى رسوم بيانية واضحة.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= Enterprise Section ================= -->
+    <section id="enterprise" class="py-12 md:py-20 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gradient-to-br from-slate-900 via-[#0f172a] to-blue-900 rounded-[2rem] md:rounded-[4rem] p-8 md:p-24 relative overflow-hidden shadow-2xl border border-slate-800">
+                
+                <!-- خلفية مضيئة (Glow effect) -->
+                <div class="absolute top-0 right-0 w-64 h-64 md:w-[500px] md:h-[500px] bg-blue-500/20 rounded-full -mr-20 -mt-20 md:-mr-64 md:-mt-64 blur-[80px] md:blur-[120px] pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full -ml-20 -mb-20 blur-[80px] pointer-events-none"></div>
+                
+                <div class="relative z-10 text-center max-w-3xl mx-auto" data-aos="zoom-in">
+                    <span class="bg-white/10 text-blue-300 px-4 py-1.5 rounded-full font-bold tracking-[0.2em] uppercase text-[10px] md:text-xs mb-6 md:mb-8 inline-block backdrop-blur-md border border-white/5">للمؤسسات والشركات الكبيرة</span>
+                    
+                    <h2 class="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-6 md:mb-8 leading-tight">انطلق نحو السحاب مع <br> <span class="text-blue-400">Mentra Business</span></h2>
+                    
+                    <p class="text-slate-300 text-sm md:text-lg mb-10 md:mb-12 leading-relaxed font-medium px-2">
+                        هل تمتلك أكثر من فرع؟ هل تريد مراقبة موظفيك ومبيعاتك من منزلك؟ انتقل الآن للنسخة السحابية الاحترافية التي تدعم تعدد الأجهزة، صلاحيات الموظفين، والمزامنة اللحظية.
                     </p>
-                    <div class="flex flex-col sm:flex-row justify-center gap-6">
-                        <a href="https://wa.me/201211934816" target="_blank" class="bg-white text-slate-900 px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center gap-3">
-                            تحدث مع مبرمج النظام
-                            <i class="fab fa-whatsapp text-2xl"></i>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6">
+                        <a href="https://wa.me/201211934816" target="_blank" class="w-full sm:w-auto bg-white text-slate-900 px-8 md:px-12 py-4 md:py-5 rounded-[1.5rem] md:rounded-[2rem] font-black text-base md:text-lg hover:bg-blue-500 hover:text-white hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl">
+                            تواصل مع المبيعات
+                            <i class="fab fa-whatsapp text-xl md:text-2xl text-emerald-500 group-hover:text-white"></i>
                         </a>
-                        <div class="bg-white/5 border border-white/10 px-8 py-5 rounded-[2rem] backdrop-blur-xl">
-                            <span class="block text-blue-400 text-[10px] font-black uppercase mb-1">دعم فني مباشر</span>
-                            <span class="text-white font-black">01211934816</span>
+                        
+                        <div class="w-full sm:w-auto bg-white/5 border border-white/10 px-6 md:px-8 py-4 md:py-5 rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-xl flex flex-col justify-center items-center">
+                            <span class="block text-blue-400 text-[9px] md:text-[10px] font-black uppercase mb-1">دعم فني مباشر (مصر)</span>
+                            <span class="text-white font-black tracking-wider" dir="ltr">+20 121 193 4816</span>
                         </div>
                     </div>
                 </div>
@@ -219,64 +311,116 @@
         </div>
     </section>
 
-    <footer class="py-20 bg-white border-t border-slate-50">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-                        <img src="assets/img/smalicon.png" alt="Logo" class="w-5 h-5 object-contain">
+    <!-- ================= Footer ================= -->
+    <footer class="py-16 md:py-20 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
+            
+            <div class="lg:col-span-2 text-center md:text-right">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-6">
+                    <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shadow-md">
+                        <img src="assets/img/smalicon.png" alt="Logo" class="w-4 h-4 object-contain">
                     </div>
                     <span class="text-xl font-black text-slate-900">Mentra<span class="text-blue-600">Lite</span></span>
                 </div>
-                <p class="text-slate-400 font-bold max-w-sm mb-8 italic">نحن نؤمن بأن التكنولوجيا يجب أن تكون متاحة للجميع، لذا جعلنا Mentra Lite مجانية للأبد لدعم كل صاحب حلم صغير.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:bg-emerald-500 hover:text-white transition-all"><i class="fab fa-whatsapp"></i></a>
+                <p class="text-slate-500 font-medium text-sm max-w-sm mx-auto md:mx-0 mb-8 leading-relaxed">
+                    نحن نؤمن بأن التكنولوجيا المتقدمة يجب أن تكون متاحة للجميع، لذا صممنا Mentra Lite مجانية لتدعم كل صاحب حلم ونشاط تجاري صغير.
+                </p>
+                <div class="flex justify-center md:justify-start gap-4">
+                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all border border-slate-100 shadow-sm"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-blue-400 hover:text-white transition-all border border-slate-100 shadow-sm"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-emerald-500 hover:text-white transition-all border border-slate-100 shadow-sm"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
-            <div>
-                <h5 class="font-black text-slate-900 mb-6 italic">روابط سريعة</h5>
-                <ul class="space-y-4 text-slate-400 font-bold text-sm">
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">عن المشروع</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">الأسئلة الشائعة</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">سياسة الخصوصية</a></li>
-                    <li><a href="#" class="hover:text-blue-600 transition-colors">شروط الاستخدام</a></li>
+            
+            <div class="text-center md:text-right">
+                <h5 class="font-black text-slate-900 mb-6 border-b-2 border-blue-100 pb-2 inline-block">روابط سريعة</h5>
+                <ul class="space-y-3 text-slate-500 font-bold text-sm">
+                    <li><a href="#" class="hover:text-blue-600 transition-colors flex items-center justify-center md:justify-start gap-2"><i class="fas fa-angle-left text-[10px]"></i> عن المشروع</a></li>
+                    <li><a href="#" class="hover:text-blue-600 transition-colors flex items-center justify-center md:justify-start gap-2"><i class="fas fa-angle-left text-[10px]"></i> الأسئلة الشائعة</a></li>
+                    <li><a href="#" class="hover:text-blue-600 transition-colors flex items-center justify-center md:justify-start gap-2"><i class="fas fa-angle-left text-[10px]"></i> سياسة الخصوصية</a></li>
+                    <li><a href="#" class="hover:text-blue-600 transition-colors flex items-center justify-center md:justify-start gap-2"><i class="fas fa-angle-left text-[10px]"></i> شروط الاستخدام</a></li>
                 </ul>
             </div>
-            <div>
-                <h5 class="font-black text-slate-900 mb-6 italic">المقر الرئيسي</h5>
-                <p class="text-slate-400 font-bold text-sm leading-relaxed italic">
-                    جمهورية مصر العربية<br>
-                    القليوبية، القناطر الخيرية<br>
-                    باسوس
+            
+            <div class="text-center md:text-right">
+                <h5 class="font-black text-slate-900 mb-6 border-b-2 border-blue-100 pb-2 inline-block">تواصل معنا</h5>
+                <p class="text-slate-500 font-bold text-sm leading-relaxed mb-4 flex items-start justify-center md:justify-start gap-2">
+                    <i class="fas fa-map-marker-alt text-blue-500 mt-1"></i>
+                    <span>جمهورية مصر العربية<br>محافظة القليوبية، باسوس</span>
+                </p>
+                <p class="text-slate-500 font-bold text-sm flex items-center justify-center md:justify-start gap-2">
+                    <i class="fas fa-envelope text-blue-500"></i>
+                    <span>support@mentra.com</span>
                 </p>
             </div>
+            
         </div>
-        <div class="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-slate-50 text-center">
-            <p class="text-slate-300 text-[10px] font-black uppercase tracking-[0.4em]">&copy; 2026 تم التطوير بكل حب بواسطة Mentra Team</p>
+        
+        <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-slate-100 text-center">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">&copy; 2025 تم التطوير بكل حب بواسطة نظام <span class="text-blue-600">Mentra</span></p>
         </div>
     </footer>
-
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker تم تفعيله بنجاح:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('فشل تفعيل Service Worker:', error);
+                });
+        });
+    }
+</script>
+    <!-- ================= Scripts ================= -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Initialize AOS
+        // تفعيل AOS Animation
         AOS.init({
-            duration: 1000,
+            duration: 800,
             once: true,
-            offset: 100
+            offset: 50,
+            disable: window.innerWidth < 768 ? 'mobile' : false 
         });
 
-        // Sticky Navbar Effect
+        // Navbar Scroll Effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('mainNav');
             if (window.scrollY > 50) {
-                nav.classList.add('py-2', 'shadow-lg');
-                nav.classList.remove('p-4');
+                nav.classList.add('py-3', 'shadow-sm', 'bg-white/95');
+                nav.classList.remove('p-4', 'bg-white/80');
             } else {
-                nav.classList.add('p-4');
-                nav.classList.remove('py-2', 'shadow-lg');
+                nav.classList.add('p-4', 'bg-white/80');
+                nav.classList.remove('py-3', 'shadow-sm', 'bg-white/95');
             }
+        });
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        const menuIcon = menuBtn.querySelector('i');
+
+        const toggleMenu = () => {
+            const isOpen = mobileMenu.classList.contains('menu-open');
+            if (isOpen) {
+                mobileMenu.classList.remove('menu-open');
+                mobileMenu.classList.add('menu-closed');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            } else {
+                mobileMenu.classList.remove('menu-closed');
+                mobileMenu.classList.add('menu-open');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            }
+        };
+
+        menuBtn.addEventListener('click', toggleMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
         });
     </script>
 </body>
