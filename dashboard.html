@@ -97,7 +97,7 @@
                     <i class="fas fa-chart-line text-sm md:text-xl"></i>
                 </div>
                 <div>
-                    <span class="text-white font-black text-xl md:text-2xl tracking-tighter block leading-none">Mentra</span>
+                    <span class="text-white font-black text-xl md:text-2xl tracking-tighter block leading-none">Mentra ERP Lite</span>
                     <span class="text-[8px] md:text-[9px] font-bold text-blue-500 uppercase tracking-[0.2em] opacity-80 leading-none">Enterprise ERP</span>
                 </div>
             </div>
@@ -172,23 +172,19 @@
             'main': { roles: ['admin', 'manager'], title: 'الرئيسية', icon: 'fa-th-large', desc: 'نظرة عامة على النظام' },
             'sales': { roles: ['admin', 'manager', 'cashier'], title: 'كاشير المبيعات', icon: 'fa-cash-register', desc: 'نقاط البيع السريعة POS' },
             'sales_report': { roles: ['admin', 'manager'], title: 'سجل المبيعات', icon: 'fa-file-invoice', desc: 'تقارير المبيعات التفصيلية' },
-<<<<<<< HEAD
             'purchases': { roles: ['admin', 'manager'], title: 'فاتورة مشتريات', icon: 'fa-shopping-cart', desc: 'إدارة المشتريات والموردين' },
             'purchases_report': { roles: ['admin', 'manager'], title: 'سجل المشتريات', icon: 'fa-history', desc: 'أرشيف فواتير المشتريات' },
             'Inventory': { roles: ['admin', 'manager'], title: 'المخازن والجرد', icon: 'fa-boxes-stacked', desc: 'إدارة الأصناف والمستودعات' },
             'accounts': { roles: ['admin'], title: 'دليل الحسابات', icon: 'fa-users-cog', desc: 'إدارة شجرة الحسابات' },
             'journal': { roles: ['admin'], title: 'القيود اليومية', icon: 'fa-book', desc: 'قيود اليومية المحاسبية' },
             'system_info': { roles: ['admin'], title: 'بيانات النظام', icon: 'fa-database', desc: 'حالة قاعدة البيانات والنسخ الاحتياطي' },
-            'settings': { roles: ['admin', 'manager'], title: 'إعدادات المستخدم', icon: 'fa-cog', desc: 'تخصيص واجهة المستخدم' }
-=======
+            'settings': { roles: ['admin', 'manager'], title: 'إعدادات المستخدم', icon: 'fa-cog', desc: 'تخصيص واجهة المستخدم' },
             'purchases': { roles: ['admin', 'manager'], title: 'مشتريات', icon: 'fa-shopping-cart', desc: 'إدارة المشتريات والموردين' },
             'purchases_report': { roles: ['admin', 'manager'], title: 'سجل المشتريات', icon: 'fa-history', desc: 'أرشيف المشتريات' },
-            'inventory': { roles: ['admin', 'manager'], title: 'المخازن والجرد', icon: 'fa-boxes-stacked', desc: 'إدارة الأصناف' },
             'accounts': { roles: ['admin'], title: 'دليل الحسابات', icon: 'fa-users-cog', desc: 'شجرة الحسابات' },
             'journal': { roles: ['admin'], title: 'القيود اليومية', icon: 'fa-book', desc: 'القيود المحاسبية' },
             'system_info': { roles: ['admin'], title: 'النسخ الاحتياطي', icon: 'fa-database', desc: 'البيانات والإعدادات' },
             'settings': { roles: ['admin', 'manager'], title: 'إعدادات النظام', icon: 'fa-cog', desc: 'تخصيص الواجهة' }
->>>>>>> 85e0c02 (إضافة التعديلات الجديدة لمشروع MentraERPLiteOffiline)
         };
 
         const userSession = {
@@ -334,16 +330,20 @@
 
         document.addEventListener('DOMContentLoaded', initUI);
     </script>
-	<script>
+<script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(registration => {
-                    console.log('Service Worker تم تفعيله بنجاح:', registration.scope);
-                })
-                .catch(error => {
-                    console.log('فشل تفعيل Service Worker:', error);
-                });
+            navigator.serviceWorker.register('service-worker.js');
+            
+            // هذا السطر يراقب إذا تم تحميل Service Worker جديد وتفعيله
+            // وبمجرد تفعيله يقوم بعمل ريفريش للصفحة ليعرض التعديلات الجديدة فوراً للعميل
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    window.location.reload();
+                    refreshing = true;
+                }
+            });
         });
     }
 </script>
